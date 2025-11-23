@@ -1,76 +1,73 @@
-IDR Rate Aggregator is a Spring Boot application that exposes one REST API endpoint for aggregating three different datasets from the Frankfurter Exchange Rate API.
-
-This project demonstrates:
-
-Strategy Pattern
-FactoryBean-based WebClient configuration
-ApplicationRunner-based startup data ingestion
-Thread-safe and immutable in-memory caching
-Clean architecture and production-ready structure
-This project is built as part of the Backend Developer Take-Home Test for Allo Bank.
-
+IDR Rate Aggregator
+IDR Rate Aggregator is a Spring Boot application exposing a single REST API endpoint that
+aggregates three different datasets from the public, keyless Frankfurter Exchange Rate API.
+This project showcases:
+- Strategy Pattern for polymorphic data fetchers
+- FactoryBean-based WebClient configuration
+- ApplicationRunner for startup data ingestion
+- Thread-safe & immutable in-memory caching
+- Clean, production-grade architecture
+- Built for the Allo Bank Backend Developer Take-Home Test
+------------------------------------------------------------
+Project Structure
 src/main/java/com/finance/idr_rate_aggregator
-├── controller/
-│   └── FinanceController.java
-│
-├── client/
-│   ├── FrankfurterClientConfig.java
-│   ├── FrankfurterClientFactory.java
-│   └── FrankfurterApiProperties.java
-│
-├── service/
-│   ├── IDRDataFetcher.java
-│   ├── LatestIdrRatesFetcher.java
-│   ├── HistoricalIdrUsdFetcher.java
-│   ├── SupportedCurrenciesFetcher.java
-│   ├── FinanceDataStore.java
-│   └── FinanceDataLoader.java
-│
-├── dto/
-│   ├── LatestRatesResponse.java
-│   ├── HistoricalRatesResponse.java
-│   ├── LatestRatesWithSpread.java
-│   └── CurrencyListResponse.java
-│
-├── util/
-│   └── SpreadCalculator.java
-│
-└── exception/
-├── GlobalExceptionHandler.java
-└── ResourceNotFoundException.java
-
+- controller/
+- FinanceController.java
+- client/
+- FrankfurterClientConfig.java
+- FrankfurterClientFactory.java
+- FrankfurterApiProperties.java
+- service/
+- IDRDataFetcher.java
+- LatestIdrRatesFetcher.java
+- HistoricalIdrUsdFetcher.java
+- SupportedCurrenciesFetcher.java
+- FinanceDataStore.java
+- FinanceDataLoader.java
+- dto/
+- LatestRatesResponse.java
+- HistoricalRatesResponse.java
+- LatestRatesWithSpread.java
+- CurrencyListResponse.java
+- util/
+- SpreadCalculator.java
+- exception/
+- GlobalExceptionHandler.java
+- ResourceNotFoundException.java
+------------------------------------------------------------
 How to Run the Application
-1. git clone https://github.com/<your-username>/IDR_Rate_Aggregator.git
+1. Clone the Repository
+   git clone https://github.com/ROZAKSEPTIAWAN/IDR_Rate_Aggregator.git
    cd IDR_Rate_Aggregator
-2. mvn clean install
-3. mvn spring-boot:run
-4. java -jar target/idr-rate-aggregator.jar
-
-API Endpoint
-curl -X GET http://localhost:8080/api/finance/data/latest_idr_rates
-curl -X GET http://localhost:8080/api/finance/data/historical_idr_usd
-curl -X GET http://localhost:8080/api/finance/data/supported_currencies
-
-Spread Factor
-rozakseptiawan
-r=114
-o=111
-z=122
-a=97
-k=107
-s=115
-e=101
-p=112
-t=116
-i=105
-a=97
-w=119
-a=97
-n=110
--------------------------
-TOTAL = 1523
-
+2. Build the Application
+   mvn clean install
+3. Run with Spring Boot
+   mvn spring-boot:run
+4. Or Run the JAR
+   java -jar target/idr-rate-aggregator.jar
+------------------------------------------------------------
+Available API Endpoints
+1. Latest IDR Rates
+   curl -X GET http://localhost:8080/api/finance/data/latest_idr_rates
+2. Historical IDR → USD Rates
+   curl -X GET "http://localhost:8080/api/finance/data/historical_idr_usd"
+3. Supported Currencies
+   curl -X GET http://localhost:8080/api/finance/data/supported_currencies
+------------------------------------------------------------
+Spread Factor Calculation
+GitHub username: rozakseptiawan
+ASCII Total = 1523
 spread = (1523 % 1000) / 100000.0
 spread = 523 / 100000
 spread = 0.00523
-
+------------------------------------------------------------
+Architectural Rationale
+Why Strategy Pattern?
+- Each data source has different structures but needs uniform behavior.
+- Enables clean polymorphism and easy extension.
+  Why FactoryBean for WebClient?
+- Allows configurable, reusable WebClient instances.
+- Centralizes base URL and reactive configuration.
+  Why ApplicationRunner instead of @PostConstruct?
+- ApplicationRunner runs after the full Spring context is ready.
+- More suitable for I/O operations like startup data ingestion
