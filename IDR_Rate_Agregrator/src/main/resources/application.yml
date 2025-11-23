@@ -1,0 +1,7 @@
+frankfurter:
+  api:
+    base-url: https://api.frankfurter.app
+
+    spring:
+      main:
+        allow-bean-definition-overriding: true
